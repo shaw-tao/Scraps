@@ -99,16 +99,23 @@ mymainmenu = awful.menu({ items = { { "Firefox", "firefox" },
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
-
-mylauncher.buttons = awful.util.table.join(
-                     awful.button({ }, 3, function ()
-                                              if instance then
+mylauncher:buttons(awful.util.table.join(
+                   awful.button({ }, 1, function ()
+                                                  if instance then
                                                   instance:hide()
                                                   instance = nil
                                               else
-                                                  instance = awful.menu.clients({ width=400 })
+                                                  instance = mymainmenu:toggle({ width=250 })
                                               end
-                                          end))
+                                        end),
+                   awful.button({ }, 3, function ()
+                                                  if instance then
+                                                  instance:hide()
+                                                  instance = nil
+                                              else
+                                                  instance = awful.menu.clients({ width=250 })
+                                              end
+                                        end)))
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
@@ -120,31 +127,34 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 --launcher_explorer = awful.widget.launcher({ image = beautiful.awesome_icon,
 --                                            command = "pcmanfm" })
 
-separator2 = wibox.widget.textbox()
---separator2:set_text("                                                                            ")
+--Separators
+sep1 = wibox.widget.textbox()
+sep1:set_text(" ")
 
-separator2:set_markup(' '..awful.tag.selected(1).name..'')
+sep2 = wibox.widget.textbox()
+sep2:set_markup(' '..awful.tag.selected(1).name..'')
 screen[1]:connect_signal("tag::history::update", function()
-       separator2:set_markup(' '..awful.tag.selected(1).name..'')
+       sep2:set_markup(' '..awful.tag.selected(1).name..'')
 end)
 
-icon_buffer = wibox.widget.textbox()
-icon_buffer:set_text("----")
-markup = wibox.widget.textbox()
-markup:set_text("")
+--icon_buffer = wibox.widget.textbox()
+--icon_buffer:set_text("----")
+--markup = wibox.widget.textbox()
+--markup:set_text("")
 
 --separator2:set_markup(' '..a..'')
 --for clients on screen (HANDLED)
 --markup append icon_buffer
 --separator2:set_markup(' '..markup..'')
 
-
+-- Create a textclock widget
+mytextclock = awful.widget.textclock()
+mytextclock:buttons(awful.util.table.join(awful.button({ }, 1,
+function () naughty.notify({text = "it works"}) end)))
 
 
 
 -- bat widget
---if you get an error regarding hibernation, change energy_now and energy_full to charge_now/full. thanks doidbb
-
 batwidget = wibox.widget.textbox()
 function batinfo(adapter)
 	local fcur = io.open("/sys/class/power_supply/"..adapter.."/charge_now")    
@@ -244,13 +254,6 @@ function (widget, args)
 	end 
 end, 1, "Master")
 
---Create separators
-separator = wibox.widget.textbox()
-separator:set_text(" ")
-
--- Create a textclock widget
-mytextclock = awful.widget.textclock()
-
 -- Create a wibox for each screen and add it
 mywibox = {}
 mypromptbox = {}
@@ -326,18 +329,19 @@ for s = 1, screen.count() do
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(mylauncher)
     left_layout:add(mypromptbox[s])
-    left_layout:add(separator)
+    left_layout:add(sep1)
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
-    right_layout:add(separator2)
     right_layout:add(mytaglist[s])
-    right_layout:add(separator2)
+    right_layout:add(sep1)
     --right_layout:add(launcher_explorer)
     right_layout:add(batwidget)
     right_layout:add(volwidget)
     right_layout:add(mytextclock)
+    right_layout:add(sep1)
+    right_layout:add(sep2)
     --right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)
