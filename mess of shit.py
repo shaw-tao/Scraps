@@ -16,42 +16,6 @@ root = None
 app = QtGui.QApplication(sys.argv)
 launch_list = []
 
-with open('launch_items', 'r') as f:
-    for line in f:
-        launch_list.append(literal_eval(line.strip()))
-    f.close()
-
-#def setXlibPlacebo(display):
-    #_WORKSPACE =            display.intern_atom("_NET_WM_DESKTOP")
-    #_CURRENT_WORKSPACE =    display.intern_atom("_NET_CURRENT_DESKTOP")
-    #_WORKSPACE_COUNT =      display.intern_atom("_NET_NUMBER_OF_DESKTOPS")
-    #_ACTIVE_WINDOW =        display.intern_atom('_NET_ACTIVE_WINDOW')
-    #_WINDOW_LIST =          display.intern_atom('_NET_CLIENT_LIST')
-    #_HIDDEN =               display.intern_atom("_NET_WM_STATE_HIDDEN")
-    #_STATE =                display.intern_atom("_NET_WM_STATE")
-    #_CHANGE_STATE =         display.intern_atom('WM_CHANGE_STATE')
-
-class MusicPlayer(QtGui.QWidget):
-    def __init__(self, parent=None):
-        super(MusicPlayer, self).__init__(parent)
-        self.initUI()
-
-    def initUI(self):
-
-#Fonts
-        fontSmall = QtGui.QFont(); fontSmall.setPointSize(8)
-        fontLarge = QtGui.QFont(); fontLarge.setPointSize(13)
-
-class Menu(QtGui.QWidget):
-    def __init__(self, parent=None):
-        super(Menu, self).__init__(parent)
-        self.initUI()
-
-    def initUI(self):
-
-    def menuScreenshot(self):
-        QtGui.QPixmap.grabWindow(QtGui.QApplication.desktop().winId()).save('screenshot_menu.png', 'png')
-
 class Task(QtGui.QPushButton):
     middleClicked = QtCore.pyqtSignal()
     rightClicked = QtCore.pyqtSignal()
@@ -101,8 +65,6 @@ class Tasklist(QtGui.QTabBar):
         QtGui.QTabBar.mouseReleaseEvent(self, mouseEvent)
 
 class Taskbar(QtGui.QWidget):
-    menu = Menu()
-    musicPlayer = MusicPlayer()
 
     def __init__(self):
         super(Taskbar, self).__init__()
