@@ -73,7 +73,7 @@ class Taskbar(QtGui.QWidget):
     def initUI(self):
 
 #Tasklist
-        self.tasks = []
+        self.tasks = []#these will be button objects
         self.middleMapper = QtCore.QSignalMapper()
         self.rightMapper = QtCore.QSignalMapper()
         self.leftMapper = QtCore.QSignalMapper()
@@ -202,16 +202,16 @@ def sendEvent(win, data, ctype, mask = None):
 
 def toggleMinimize(index):
     window_list = getWindowList()
-    if getActiveWindow() == window_list[index]:
+    if getActiveWindow() == window_list[index]:#Minimize if active
         sendEvent(window_list[index], [2, display.intern_atom("_NET_WM_STATE_HIDDEN")], display.intern_atom("_NET_WM_STATE"))
         sendEvent(window_list[index], [Xutil.IconicState], display.intern_atom('WM_CHANGE_STATE'))
-    elif display.intern_atom("_NET_WM_STATE_HIDDEN") in window_list[index].get_full_property(display.intern_atom("_NET_WM_STATE"), Xatom.ATOM).value:
+    elif display.intern_atom("_NET_WM_STATE_HIDDEN") in window_list[index].get_full_property(display.intern_atom("_NET_WM_STATE"), Xatom.ATOM).value:#Maximize if hidden
         sendEvent(window_list[index], [2, display.intern_atom("_NET_WM_STATE_HIDDEN")], display.intern_atom("_NET_WM_STATE"))
         window_list[index].map()#possibly not required
         window_list[index].configure(stack_mode=X.Above)
         display.flush()
         window_list[index].set_input_focus(X.RevertToNone, X.CurrentTime)
-    else:
+    else:#Bring to front
         window_list[index].configure(stack_mode=X.Above)
         window_list[index].set_input_focus(X.RevertToNone, X.CurrentTime)
 
