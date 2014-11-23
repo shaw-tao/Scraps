@@ -16,26 +16,6 @@ root = None
 app = QtGui.QApplication(sys.argv)
 launch_list = []
 
-class Task(QtGui.QPushButton):
-    middleClicked = QtCore.pyqtSignal()
-    rightClicked = QtCore.pyqtSignal()
-    leftClicked = QtCore.pyqtSignal()
-
-    def __init__(self):
-        super(QtGui.QPushButton, self).__init__()
-
-    def mousePressEvent(self, mouseEvent):
-        QtGui.QPushButton.mousePressEvent(self, mouseEvent)
-
-    def mouseReleaseEvent(self, mouseEvent):
-        if mouseEvent.button() == QtCore.Qt.MidButton:
-            self.middleClicked.emit()
-        if mouseEvent.button() == QtCore.Qt.RightButton:
-            self.rightClicked.emit()
-        if mouseEvent.button() == QtCore.Qt.LeftButton:
-            self.leftClicked.emit()
-        QtGui.QPushButton.mouseReleaseEvent(self, mouseEvent)
-
 class Tasklist(QtGui.QTabBar):
     middleClicked = QtCore.pyqtSignal(int)
     rightClicked = QtCore.pyqtSignal(int)
@@ -79,7 +59,7 @@ class Taskbar(QtGui.QWidget):
         self.leftMapper = QtCore.QSignalMapper()
 
 #Worspaces
-        self.workspaces = []
+        self.workspaces = []#also button objects
         for i in range(getWorkspaceCount()-1):
             b = QtGui.QPushButton(QtCore.QString.fromUtf8(getWorkspaceNames()[i])) ; b.setFixedSize(15,20) ; b.setFont(self.fontSmall)
             self.workspaces.append(b)
